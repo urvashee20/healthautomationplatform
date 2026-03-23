@@ -36,7 +36,7 @@ namespace SmartHealthCompanion.Controllers
             {
                 UserId = Guid.Parse(userId),
                 FirstName = dto.FirstName,
-                MiddleName = dto.MiddleName,
+               // MiddleName = dto.MiddleName,
                 LastName = dto.LastName,
                 DOB = dto.DOB,
                 Height = dto.Height,

@@ -18,9 +18,12 @@ namespace SmartHealthCompanion.Controllers
             _context = context;
         }
         [HttpPost]
-        public async Task<IActionResult> SetGoal(GoalDto dto)
+        public async Task<IActionResult> SetGoal(CreateGoalDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
 
             var profile = await _context.UserProfiles
                 .FirstOrDefaultAsync(x => x.UserId == Guid.Parse(userId));
@@ -31,15 +34,30 @@ namespace SmartHealthCompanion.Controllers
             var goal = new Goal
             {
                 UserProfileId = profile.Id,
-                GoalType = dto.GoalType,
+                PrimaryGoal = dto.PrimaryGoal,
+                SecondaryGoals = dto.SecondaryGoals != null
+                    ? System.Text.Json.JsonSerializer.Serialize(dto.SecondaryGoals)
+                    : null,
+                HealthConditions = dto.HealthConditions != null
+                    ? System.Text.Json.JsonSerializer.Serialize(dto.HealthConditions)
+                    : null,
+                IsCustomGoal = dto.IsCustomGoal,
+                CustomGoalText = dto.CustomGoalText,
                 TargetWeight = dto.TargetWeight,
-                StartDate = DateTime.UtcNow
+                DurationInDays = dto.DurationInDays,
+                HasGymAccess = dto.HasGymAccess,
+                SleepHours = dto.SleepHours,
+                CreatedAt = DateTime.UtcNow
             };
 
             _context.Goals.Add(goal);
             await _context.SaveChangesAsync();
 
-            return Ok("Goal Set Successfully");
+            return Ok(new
+            {
+                message = "Goal set successfully",
+                goalId = goal.Id
+            });
         }
 
         [HttpGet]
@@ -47,15 +65,43 @@ namespace SmartHealthCompanion.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
             var profile = await _context.UserProfiles
                 .FirstOrDefaultAsync(x => x.UserId == Guid.Parse(userId));
 
+            if (profile == null)
+                return NotFound("Profile not found");
+
             var goal = await _context.Goals
                 .Where(x => x.UserProfileId == profile.Id)
-                .OrderByDescending(x => x.StartDate)
+                .OrderByDescending(x => x.CreatedAt)
                 .FirstOrDefaultAsync();
 
-            return Ok(goal);
+            if (goal == null)
+                return Ok("No goal set");
+
+            var result = new
+            {
+                goal.Id,
+                goal.PrimaryGoal,
+                SecondaryGoals = !string.IsNullOrEmpty(goal.SecondaryGoals)
+                    ? System.Text.Json.JsonSerializer.Deserialize<List<string>>(goal.SecondaryGoals)
+                    : null,
+                HealthConditions = !string.IsNullOrEmpty(goal.HealthConditions)
+                    ? System.Text.Json.JsonSerializer.Deserialize<List<string>>(goal.HealthConditions)
+                    : null,
+                goal.IsCustomGoal,
+                goal.CustomGoalText,
+                goal.TargetWeight,
+                goal.DurationInDays,
+                goal.HasGymAccess,
+                goal.SleepHours,
+                goal.CreatedAt
+            };
+
+            return Ok(result);
         }
     }
 }

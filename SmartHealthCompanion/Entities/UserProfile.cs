@@ -5,7 +5,7 @@
         public long Id { get; set; }
         public Guid UserId { get; set; }
         public string FirstName { get; set; }
-        public string? MiddleName { get; set; }
+       // public string? MiddleName { get; set; }
         public string LastName { get; set; }
         public DateTime DOB { get; set; }
         public decimal? Height { get; set; } // in cm
@@ -15,10 +15,15 @@
         public DateTime? JobStartTime { get; set; }
         public DateTime? JobEndTime { get; set; }
         public string DailyRoutine { get; set; }
+        public string FoodPreference { get; set; } // Veg / NonVeg
+        public string? HealthConditions { get; set; } // Diabetes, BP
+        public decimal? SleepHours { get; set; }
         public User User { get; set; }
         public ICollection<Goal>? Goals { get; set; }
+        public ICollection<AIPlan>? AIPlans { get; set; }
+        public ICollection<HealthRisk>? HealthRisks { get; set; }
         public ICollection<DailyLog>? DailyLogs { get; set; }
-        public ICollection<Recommendation>? Recommendations { get; set; }
+       // public ICollection<Recommendation>? Recommendations { get; set; }
         public ICollection<BehaviorLog>? BehaviorLogs { get; set; }
         public ICollection<Notification>? Notifications { get; set; }
     }

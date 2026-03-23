@@ -1,11 +1,26 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.SemanticKernel;
 using SmartHealthCompanion.Data;
 using SmartHealthCompanion.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<Kernel>(sp =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+
+    var kernelBuilder = Kernel.CreateBuilder();
+
+    kernelBuilder.AddGoogleAIGeminiChatCompletion(
+        modelId: "gemini-1.5-flash",
+        apiKey: config["Gemini:ApiKey"]
+    );
+
+    return kernelBuilder.Build();
+});
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 

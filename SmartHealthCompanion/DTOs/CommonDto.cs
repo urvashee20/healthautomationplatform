@@ -12,10 +12,25 @@
             public string Email { get; set; }
             public string Password { get; set; }
         }
-        public class GoalDto
+        public class CreateGoalDto
         {
-            public string GoalType { get; set; } 
+            public string? PrimaryGoal { get; set; }
+            public List<string>? SecondaryGoals { get; set; }
+            public List<string>? HealthConditions { get; set; }
+            public bool IsCustomGoal { get; set; }
+            public string? CustomGoalText { get; set; }
             public decimal? TargetWeight { get; set; }
+            public int? DurationInDays { get; set; }
+            public bool? HasGymAccess { get; set; }
+            public decimal? SleepHours { get; set; }
+        }
+
+        public class AIPlanDto
+        {
+            public string DietPlan { get; set; }
+            public string WorkoutPlan { get; set; }
+            public string WaterPlan { get; set; }
+            public string SleepPlan { get; set; }
         }
     }
 }

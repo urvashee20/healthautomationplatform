@@ -10,9 +10,11 @@ namespace SmartHealthCompanion.Data
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Goal> Goals { get; set; }
         public DbSet<DailyLog> DailyLogs { get; set; }
-        public DbSet<Recommendation> Recommendations { get; set; }
+        //public DbSet<Recommendation> Recommendations { get; set; }
         public DbSet<BehaviorLog> BehaviorLogs { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<AIPlan> AIPlan { get; set; }
+        public DbSet<HealthRisk> HealthRisk { get; set; }
 
     }
 }

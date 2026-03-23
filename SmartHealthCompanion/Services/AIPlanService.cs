@@ -16,7 +16,7 @@ namespace SmartHealthCompanion.Services
 
         public async Task<AIPlan> GeneratePlanAsync(UserProfile profile, Goal? goal)
         {
-            var prompt = BuildPrompt(profile, goal);
+            var prompt = BuildPrompt(profile, goal);    
 
             var aiResponse = await _geminiService.GenerateAsync(prompt);
 

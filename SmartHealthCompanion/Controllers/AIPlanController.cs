@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartHealthCompanion.Data;
+using SmartHealthCompanion.DTOs;
 using SmartHealthCompanion.Services;
 using System.Security.Claims;
 
@@ -40,7 +41,15 @@ namespace SmartHealthCompanion.Controllers
             _context.AIPlan.Add(plan);
             await _context.SaveChangesAsync();
 
-            return Ok(plan);
+            return Ok(new AIPlanResponseDto
+            {
+                Id = plan.Id,
+                DietPlan = plan.DietPlan,
+                WorkoutPlan = plan.WorkoutPlan,
+                WaterPlan = plan.WaterPlan,
+                SleepPlan = plan.SleepPlan,
+                CreatedAt = plan.CreatedAt
+            });
         }
 
         [HttpGet("latest-plan")]

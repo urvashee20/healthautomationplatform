@@ -45,7 +45,10 @@ namespace SmartHealthCompanion.Controllers
                 JobName = dto.JobName,
                 JobStartTime = dto.JobStartTime,
                 JobEndTime = dto.JobEndTime,
-                DailyRoutine = dto.DailyRoutine
+                DailyRoutine = dto.DailyRoutine,
+                FoodPreference = dto.FoodPreference,
+                HealthConditions = dto.HealthConditions,
+                SleepHours = dto.SleepHours
             };
 
             _context.UserProfiles.Add(profile);

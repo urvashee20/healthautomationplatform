@@ -24,13 +24,5 @@
             public bool? HasGymAccess { get; set; }
             public decimal? SleepHours { get; set; }
         }
-
-        public class AIPlanDto
-        {
-            public string DietPlan { get; set; }
-            public string WorkoutPlan { get; set; }
-            public string WaterPlan { get; set; }
-            public string SleepPlan { get; set; }
-        }
     }
 }

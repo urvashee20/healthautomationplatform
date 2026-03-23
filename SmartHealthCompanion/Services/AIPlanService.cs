@@ -1,28 +1,47 @@
 ﻿using Microsoft.SemanticKernel;
+using SmartHealthCompanion.DTOs;
 using SmartHealthCompanion.Entities;
 using System.Text.Json;
-using static SmartHealthCompanion.DTOs.CommonDto;
 
 namespace SmartHealthCompanion.Services
 {
     public class AIPlanService
     {
-        private readonly Kernel _kernel;
-        public AIPlanService(Kernel kernel)
+        private readonly GeminiService _geminiService;
+
+        public AIPlanService(GeminiService geminiService)
         {
-            _kernel = kernel;
+            _geminiService = geminiService;
         }
 
         public async Task<AIPlan> GeneratePlanAsync(UserProfile profile, Goal? goal)
         {
             var prompt = BuildPrompt(profile, goal);
 
-            var result = await _kernel.InvokePromptAsync(prompt);
+            var aiResponse = await _geminiService.GenerateAsync(prompt);
 
-            var aiResponse = result.GetValue<string>();
+            var cleanedJson = ExtractJson(aiResponse);
 
-            // 🧠 Parse structured JSON
-            var planDto = JsonSerializer.Deserialize<AIPlanDto>(aiResponse);
+            AIPlanDto? planDto = null;
+
+            try
+            {
+                planDto = JsonSerializer.Deserialize<AIPlanDto>(cleanedJson,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+            }
+            catch
+            {
+                planDto = new AIPlanDto
+                {
+                    DietPlan = aiResponse,
+                    WorkoutPlan = "Not generated",
+                    WaterPlan = "Not generated",
+                    SleepPlan = "Not generated"
+                };
+            }
 
             return new AIPlan
             {
@@ -72,6 +91,19 @@ Format:
   ""sleepPlan"": ""...""
 }}
 ";
+        }
+
+        private string ExtractJson(string response)
+        {
+            int start = response.IndexOf("{");
+            int end = response.LastIndexOf("}");
+
+            if (start >= 0 && end > start)
+            {
+                return response.Substring(start, end - start + 1);
+            }
+
+            return response; // fallback
         }
 
         private int CalculateAge(DateTime dob)

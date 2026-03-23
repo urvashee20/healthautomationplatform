@@ -13,5 +13,8 @@
         public DateTime? JobStartTime { get; set; }
         public DateTime? JobEndTime { get; set; }
         public string DailyRoutine { get; set; }
+        public string FoodPreference { get; set; } // Veg / NonVeg
+        public string? HealthConditions { get; set; } // Diabetes, BP
+        public decimal? SleepHours { get; set; }
     }
 }

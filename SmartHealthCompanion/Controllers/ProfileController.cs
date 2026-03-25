@@ -77,5 +77,21 @@ namespace SmartHealthCompanion.Controllers
 
             return Ok("Profile Updated");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetById()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized();
+
+            if (!Guid.TryParse(userId, out Guid UserId))
+                return BadRequest("Invalid UserId");
+
+            var user = _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == UserId);
+
+            return Ok(user);
+        }
     }
 }

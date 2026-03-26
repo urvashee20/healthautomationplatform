@@ -17,5 +17,7 @@ namespace SmartHealthCompanion.Entities
         public decimal? SleepHours { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public UserProfile UserProfile { get; set; }
+        public AIPlan? Plan { get; set; }
+
     }
 }

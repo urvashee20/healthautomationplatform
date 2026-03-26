@@ -36,7 +36,6 @@ namespace SmartHealthCompanion.Controllers
             {
                 UserId = Guid.Parse(userId),
                 FirstName = dto.FirstName,
-               // MiddleName = dto.MiddleName,
                 LastName = dto.LastName,
                 DOB = dto.DOB,
                 Height = dto.Height,
@@ -79,7 +78,7 @@ namespace SmartHealthCompanion.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetById()
+        public async Task<IActionResult> GetProfileById()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -89,9 +88,23 @@ namespace SmartHealthCompanion.Controllers
             if (!Guid.TryParse(userId, out Guid UserId))
                 return BadRequest("Invalid UserId");
 
-            var user = _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == UserId);
+            var existingProfile = await _context.UserProfiles
+                .FirstOrDefaultAsync(x => x.UserId == UserId);
 
-            return Ok(user);
+            if (existingProfile == null)
+            {
+                return Ok(new
+                {
+                    exists = false,
+                    profile = (UserProfile)null
+                });
+            }
+
+            return Ok(new
+            {
+                exists = true,
+                profile = existingProfile
+            });
         }
     }
 }

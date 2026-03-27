@@ -18,6 +18,5 @@ namespace SmartHealthCompanion.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public UserProfile UserProfile { get; set; }
         public AIPlan? Plan { get; set; }
-
     }
 }

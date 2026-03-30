@@ -13,9 +13,10 @@ namespace SmartHealthCompanion.Entities
         public string WorkoutPlan { get; set; }
         public string WaterPlan { get; set; }
         public string SleepPlan { get; set; }
-        public string? Notes { get; set; } // extra AI suggestions
+        public string? Notes { get; set; } 
         public DateTime CreatedAt { get; set; }
         public UserProfile UserProfile { get; set; }
         public Goal? Goal { get; set; }
+        public ICollection<ChatSession>? ChatSession { get; set; }
     }
 }

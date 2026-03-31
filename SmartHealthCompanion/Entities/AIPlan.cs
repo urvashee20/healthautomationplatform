@@ -17,6 +17,5 @@ namespace SmartHealthCompanion.Entities
         public DateTime CreatedAt { get; set; }
         public UserProfile UserProfile { get; set; }
         public Goal? Goal { get; set; }
-        public ICollection<ChatSession>? ChatSession { get; set; }
     }
 }

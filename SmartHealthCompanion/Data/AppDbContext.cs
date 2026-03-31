@@ -15,6 +15,8 @@ namespace SmartHealthCompanion.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<AIPlan> AIPlan { get; set; }
         public DbSet<HealthRisk> HealthRisk { get; set; }
+        public DbSet<ChatMessage> ChatMessage { get; set; }
+        public DbSet<ChatSession> ChatSession { get; set; }
 
     }
 }

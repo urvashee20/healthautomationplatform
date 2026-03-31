@@ -26,5 +26,6 @@
        // public ICollection<Recommendation>? Recommendations { get; set; }
         public ICollection<BehaviorLog>? BehaviorLogs { get; set; }
         public ICollection<Notification>? Notifications { get; set; }
+        public ICollection<ChatSession>? ChatSessions { get; set; }
     }
 }

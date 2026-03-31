@@ -107,27 +107,30 @@ namespace SmartHealthCompanion.Migrations
 
             modelBuilder.Entity("SmartHealthCompanion.Entities.ChatMessage", b =>
                 {
-                    b.Property<long?>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long?>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("AIResponse")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("ChatSessionId")
                         .HasColumnType("bigint");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsError")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Response")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<double?>("ResponseTimeMs")
                         .HasColumnType("float");
+
+                    b.Property<string>("UserMessage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -153,9 +156,14 @@ namespace SmartHealthCompanion.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("UserProfileId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AIPlanId");
+
+                    b.HasIndex("UserProfileId");
 
                     b.ToTable("ChatSession");
                 });
@@ -451,11 +459,15 @@ namespace SmartHealthCompanion.Migrations
 
             modelBuilder.Entity("SmartHealthCompanion.Entities.ChatSession", b =>
                 {
-                    b.HasOne("SmartHealthCompanion.Entities.AIPlan", "AIPlan")
+                    b.HasOne("SmartHealthCompanion.Entities.AIPlan", null)
                         .WithMany("ChatSession")
                         .HasForeignKey("AIPlanId");
 
-                    b.Navigation("AIPlan");
+                    b.HasOne("SmartHealthCompanion.Entities.UserProfile", "UserProfile")
+                        .WithMany("ChatSessions")
+                        .HasForeignKey("UserProfileId");
+
+                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("SmartHealthCompanion.Entities.DailyLog", b =>
@@ -538,6 +550,8 @@ namespace SmartHealthCompanion.Migrations
                     b.Navigation("AIPlans");
 
                     b.Navigation("BehaviorLogs");
+
+                    b.Navigation("ChatSessions");
 
                     b.Navigation("DailyLogs");
 

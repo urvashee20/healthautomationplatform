@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SmartHealthCompanion.Data;
+using SmartHealthCompanion.Interfaces;
 using SmartHealthCompanion.Services;
 using System.Text;
 
@@ -33,6 +34,8 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddHttpClient<GeminiService>();
+builder.Services.AddHttpClient<IAIService, AIService>();
+builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<AIPlanService>();
 builder.Services.AddAutoMapper(typeof(MappingProfileClass));
 builder.Services.AddCors(options => {
